@@ -3,9 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Шалена бджілка</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #fffbe6; }
+        .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #e2c96c; padding: 30px; }
+        h1 { color: #b8860b; text-align: center; }
+        .row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
+        .card { width: 45%; background: #fffbe6; border-radius: 10px; box-shadow: 0 2px 8px #e2c96c; padding: 20px; margin-bottom: 20px; text-align: center; }
+        .card img { max-height: 200px; max-width: 100%; object-fit: cover; border-radius: 10px; }
+        .card-title { font-size: 1.3em; margin: 10px 0 5px; color: #b8860b; }
+        .card-text { font-size: 1em; color: #555; }
+    </style>
 </head>
 <body>
-    <h1>Вітаємо на сайті "Шалена бджілка"!</h1>
-    <p>Тут буде сайт для купівлі меду.</p>
+    <div class="container">
+        <h1>Купіть натуральний мед!</h1>
+        <div class="row">
+            {% for honey in honeys %}
+            <div class="card">
+                <img src="/media/{{ honey.img }}" alt="{{ honey.name }}">
+                <div class="card-title">{{ honey.name }}</div>
+                <div class="card-text">{{ honey.desc }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </body>
 </html> 
