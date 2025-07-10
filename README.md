@@ -18,7 +18,7 @@
 - `app.py` — основний Flask-додаток
 - `requirements.txt` — залежності
 - `templates/` — HTML-шаблони
-- `media/` — зображення
+- `media/` — зображення (не входить у git)
 - `orders/` — Excel-замовлення (не входить у git)
 
 ## Автор
