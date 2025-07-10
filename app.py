@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory
 import os
 import openpyxl
 from openpyxl import Workbook, load_workbook
@@ -103,6 +103,10 @@ def clear_cart():
     session['cart'] = []
     flash('Корзину очищено!', 'success')
     return redirect(url_for('cart'))
+
+@app.route('/media/<path:filename>')
+def media(filename):
+    return send_from_directory('media', filename)
 
 if __name__ == '__main__':
     app.run(debug=True) 

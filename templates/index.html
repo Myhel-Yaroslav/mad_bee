@@ -3,20 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Шалена бджілка</title>
+    <link rel="icon" type="image/png" href="/media/logo.png">
     <style>
-        body { font-family: Arial, sans-serif; background: #fffbe6; }
-        .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #e2c96c; padding: 30px; }
-        h1 { color: #b8860b; text-align: center; }
+        body {
+            font-family: Arial, sans-serif;
+            background: url('/media/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0; padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #e2c96c;
+            padding: 30px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .header img { height: 60px; width: auto; margin-right: 15px; }
+        h1 { color: #b8860b; margin: 0; }
         .row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
         .card { width: 45%; background: #fffbe6; border-radius: 10px; box-shadow: 0 2px 8px #e2c96c; padding: 20px; margin-bottom: 20px; text-align: center; }
         .card img { max-height: 200px; max-width: 100%; object-fit: cover; border-radius: 10px; }
         .card-title { font-size: 1.3em; margin: 10px 0 5px; color: #b8860b; }
         .card-text { font-size: 1em; color: #555; }
+        .btn { display: inline-block; padding: 10px 20px; border-radius: 5px; background: #b8860b; color: #fff; text-decoration: none; margin-top: 10px; }
+        .btn:hover { background: #e2c96c; color: #333; }
+        .btn-outline-success { background: none; color: #198754; border: 1px solid #198754; }
+        .btn-outline-success:hover { background: #198754; color: #fff; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Купіть натуральний мед!</h1>
+        <div class="header">
+            <img src="/media/logo.png" alt="Лого">
+            <h1>Купіть натуральний мед!</h1>
+        </div>
         <div class="row">
             {% for honey in honeys %}
             <div class="card">
@@ -29,5 +56,20 @@
         </div>
         <a href="/cart" class="btn btn-outline-success mb-3">Перейти до корзини</a>
     </div>
+    <div class="contacts-footer">
+        Контакти для довідок: Телефон: +38 (068) 386-65-24 | Email: ist23-ya.myhel@nubip.edu.ua
+    </div>
+    <style>
+        .contacts-footer {
+            background: #fff;
+            color: #333;
+            text-align: center;
+            padding: 16px 0 14px 0;
+            font-size: 1.1em;
+            box-shadow: 0 -2px 8px #e2c96c;
+            border-radius: 0 0 10px 10px;
+            margin-top: 40px;
+        }
+    </style>
 </body>
 </html> 

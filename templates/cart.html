@@ -2,23 +2,35 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Корзина</title>
+    <title>Шалена бджілка</title>
+    <link rel="icon" type="image/png" href="/media/logo.png">
     <style>
-        body { background: #fffbe6; }
-        .container { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #e2c96c; padding: 30px; }
-        h1 { color: #b8860b; }
+        body { background: url('/media/background.jpg') no-repeat center center fixed; background-size: cover; }
+        .container { max-width: 700px; margin: 40px auto; background: rgba(255,255,255,0.95); border-radius: 10px; box-shadow: 0 2px 8px #e2c96c; padding: 30px; }
+        .header { display: flex; align-items: center; margin-bottom: 20px; }
+        .header img { height: 50px; width: auto; margin-right: 15px; }
+        h1 { color: #b8860b; margin: 0; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         th, td { border: 1px solid #e2c96c; padding: 8px; text-align: center; }
         th { background: #fffbe6; }
         .flash { padding: 10px; border-radius: 5px; margin-bottom: 15px; }
         .flash-danger { background: #ffe0e0; color: #a94442; }
         .flash-success { background: #e6ffe0; color: #3c763d; }
+        .btn { display: inline-block; padding: 10px 20px; border-radius: 5px; background: #b8860b; color: #fff; text-decoration: none; margin-top: 10px; }
+        .btn:hover { background: #e2c96c; color: #333; }
+        .btn-danger { background: #dc3545; color: #fff; border: none; }
+        .btn-danger:hover { background: #a94442; color: #fff; }
+        .btn-success { background: #198754; color: #fff; border: none; }
+        .btn-success:hover { background: #145c32; color: #fff; }
+        .ms-2 { margin-left: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="/" class="btn btn-link">&larr; На головну</a>
-        <h1>Ваша корзина</h1>
+        <div class="header">
+            <img src="/media/logo.png" alt="Лого">
+            <h1>Ваша корзина</h1>
+        </div>
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
