@@ -11,25 +11,29 @@ HONEY_TYPES = [
         'slug': 'acacia',
         'name': "Акацієвий мед",
         'desc': "Світлий, ніжний, з легким ароматом акації. Дуже корисний для дітей.",
-        'img': 'acacia.jpg'
+        'img': 'acacia.jpg',
+        'price': 375
     },
     {
         'slug': 'buckwheat',
         'name': "Гречаний мед",
         'desc': "Темний, насичений смак, багатий на залізо. Рекомендується при анемії.",
-        'img': 'buckwheat.jpg'
+        'img': 'buckwheat.jpg',
+        'price': 325
     },
     {
         'slug': 'sunflower',
         'name': "Соняшниковий мед",
         'desc': "Яскравий, золотистий, з приємною кислинкою. Дуже популярний в Україні.",
-        'img': 'sunflower.jpg'
+        'img': 'sunflower.jpg',
+        'price': 300
     },
     {
         'slug': 'herbs',
         'name': "Мед різнотрав'я",
         'desc': "Ароматний, зібраний з різних польових квітів. Має широкий спектр корисних властивостей.",
-        'img': 'herbs.jpg'
+        'img': 'herbs.jpg',
+        'price': 400
     },
 ]
 
@@ -39,23 +43,47 @@ EXCEL_FILE = os.path.join(ORDERS_DIR, 'orders.xlsx')
 def save_orders_to_excel(cart):
     if not cart:
         return
-    if not os.path.exists(ORDERS_DIR):
-        os.makedirs(ORDERS_DIR)
+    os.makedirs(ORDERS_DIR, exist_ok=True)
     try:
         wb = load_workbook(EXCEL_FILE)
         ws = wb.active
     except FileNotFoundError:
         wb = Workbook()
         ws = wb.active
-        ws.append(['Мед', 'Кількість (кг)', "Ім'я", 'Телефон', 'Адреса нової пошти'])
+        ws.append(['Мед', 'Ціна за 1 л (грн)', 'Кількість (л)', 'Сума за мед (грн)', "Ім'я", 'Телефон', 'Адреса нової пошти', 'Загальна сума замовлення (грн)'])
+    # Підрахунок загальної суми для замовлення
+    total = 0
+    rows = []
     for item in cart:
-        ws.append([
+        price = 0
+        if item.get('honey') == 'Акацієвий мед':
+            price = 375
+        elif item.get('honey') == 'Гречаний мед':
+            price = 325
+        elif item.get('honey') == 'Соняшниковий мед':
+            price = 300
+        elif item.get('honey') == "Мед різнотрав'я":
+            price = 400
+        amount = float(item.get('amount', 0))
+        sum_for_honey = price * amount
+        total += sum_for_honey
+        rows.append([
             item.get('honey', ''),
-            item.get('amount', ''),
+            price,
+            amount,
+            round(sum_for_honey, 2),
             item.get('name', ''),
             item.get('phone', ''),
-            item.get('address', '')
+            item.get('address', ''),
+            ''  # Загальна сума буде тільки в останньому рядку
         ])
+    # Додаємо всі рядки
+    for i, row in enumerate(rows):
+        if i == len(rows) - 1:
+            row[-1] = round(total, 2)
+        ws.append(row)
+    # Додаємо порожній рядок для розділення замовлень
+    ws.append([''] * len(rows[0]))
     wb.save(EXCEL_FILE)
 
 @app.route('/')

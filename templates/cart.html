@@ -23,6 +23,7 @@
         .btn-success { background: #198754; color: #fff; border: none; }
         .btn-success:hover { background: #145c32; color: #fff; }
         .ms-2 { margin-left: 10px; }
+        .total-row { font-weight: bold; background: #fffbe6; color: #b8860b; }
     </style>
 </head>
 <body>
@@ -43,30 +44,53 @@
             <thead>
                 <tr>
                     <th>Мед</th>
-                    <th>Кількість (кг)</th>
+                    <th>Ціна за 1 л (грн)</th>
+                    <th>Кількість (л)</th>
+                    <th>Сума за мед (грн)</th>
                     <th>Ім'я</th>
                     <th>Телефон</th>
                     <th>Адреса нової пошти</th>
                 </tr>
             </thead>
             <tbody>
+                {% set total = namespace(val=0) %}
                 {% for item in cart %}
+                {% set price = 0 %}
+                {% if item.honey == 'Акацієвий мед' %}
+                    {% set price = 375 %}
+                {% elif item.honey == 'Гречаний мед' %}
+                    {% set price = 325 %}
+                {% elif item.honey == 'Соняшниковий мед' %}
+                    {% set price = 300 %}
+                {% elif item.honey == "Мед різнотрав'я" %}
+                    {% set price = 400 %}
+                {% endif %}
+                {% set sum = price * item.amount|float %}
+                {% set total.val = total.val + sum %}
                 <tr>
                     <td>{{ item.honey }}</td>
+                    <td>{{ price }}</td>
                     <td>{{ item.amount }}</td>
+                    <td>{{ sum|round(2) }}</td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.phone }}</td>
                     <td>{{ item.address }}</td>
                 </tr>
                 {% endfor %}
+                <tr class="total-row">
+                    <td colspan="3">Загальна сума до сплати:</td>
+                    <td colspan="4">{{ total.val|round(2) }} грн</td>
+                </tr>
             </tbody>
         </table>
         <form method="post" action="/place_order">
             <button type="submit" class="btn btn-success">Оформити замовлення</button>
             <a href="/clear_cart" class="btn btn-danger ms-2">Очистити корзину</a>
+            <a href="/" class="btn btn-outline-success ms-2">Повернутися до каталогу</a>
         </form>
         {% else %}
         <p>Корзина порожня.</p>
+        <a href="/" class="btn btn-outline-success mt-3">На головну</a>
         {% endif %}
     </div>
 </body>

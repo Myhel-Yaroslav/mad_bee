@@ -36,6 +36,12 @@
         .btn:hover { background: #e2c96c; color: #333; }
         .btn-outline-success { background: none; color: #198754; border: 1px solid #198754; }
         .btn-outline-success:hover { background: #198754; color: #fff; }
+        .card-price {
+            font-size: 1.1em;
+            color: #198754;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -49,6 +55,7 @@
             <div class="card">
                 <img src="/media/{{ honey.img }}" alt="{{ honey.name }}">
                 <div class="card-title">{{ honey.name }}</div>
+                <div class="card-price">{{ honey.price }} грн/л</div>
                 <div class="card-text">{{ honey.desc }}</div>
                 <a href="/honey/{{ honey.slug }}" class="btn btn-warning" style="margin-top:10px;">Замовити</a>
             </div>

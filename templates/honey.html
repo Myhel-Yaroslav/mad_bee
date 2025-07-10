@@ -19,6 +19,13 @@
         .flash { padding: 10px; border-radius: 5px; margin-bottom: 15px; }
         .flash-danger { background: #ffe0e0; color: #a94442; }
         .flash-success { background: #e6ffe0; color: #3c763d; }
+        .honey-price {
+            font-size: 1.2em;
+            color: #198754;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -27,6 +34,7 @@
             <img src="/media/logo.png" alt="Лого">
             <h1>{{ honey.name }}</h1>
         </div>
+        <div class="honey-price">{{ honey.price }} грн/л</div>
         <img src="/media/{{ honey.img }}" alt="{{ honey.name }}" class="honey-img">
         <p>{{ honey.desc }}</p>
         {% with messages = get_flashed_messages(with_categories=true) %}
