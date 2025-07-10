@@ -1,4 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+import os
+import openpyxl
+from openpyxl import Workbook, load_workbook
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -30,6 +33,31 @@ HONEY_TYPES = [
     },
 ]
 
+ORDERS_DIR = 'orders'
+EXCEL_FILE = os.path.join(ORDERS_DIR, 'orders.xlsx')
+
+def save_orders_to_excel(cart):
+    if not cart:
+        return
+    if not os.path.exists(ORDERS_DIR):
+        os.makedirs(ORDERS_DIR)
+    try:
+        wb = load_workbook(EXCEL_FILE)
+        ws = wb.active
+    except FileNotFoundError:
+        wb = Workbook()
+        ws = wb.active
+        ws.append(['Мед', 'Кількість (кг)', "Ім'я", 'Телефон', 'Адреса нової пошти'])
+    for item in cart:
+        ws.append([
+            item.get('honey', ''),
+            item.get('amount', ''),
+            item.get('name', ''),
+            item.get('phone', ''),
+            item.get('address', '')
+        ])
+    wb.save(EXCEL_FILE)
+
 @app.route('/')
 def home():
     return render_template('index.html', honeys=HONEY_TYPES)
@@ -42,13 +70,39 @@ def honey_page(slug):
     if request.method == 'POST':
         name = request.form.get('name')
         phone = request.form.get('phone')
+        address = request.form.get('address')
         amount = request.form.get('amount')
-        if not name or not phone or not amount:
+        if not name or not phone or not amount or not address:
             flash('Будь ласка, заповніть всі поля!', 'danger')
         else:
-            flash('Дякуємо за замовлення! Ми звʼяжемося з вами найближчим часом.', 'success')
-            return redirect(url_for('honey_page', slug=slug))
+            cart = session.get('cart', [])
+            cart.append({'honey': honey['name'], 'amount': amount, 'name': name, 'phone': phone, 'address': address})
+            session['cart'] = cart
+            flash('Товар додано до корзини!', 'success')
+            return redirect(url_for('cart'))
     return render_template('honey.html', honey=honey)
+
+@app.route('/cart', methods=['GET'])
+def cart():
+    cart = session.get('cart', [])
+    return render_template('cart.html', cart=cart)
+
+@app.route('/place_order', methods=['POST'])
+def place_order():
+    cart = session.get('cart', [])
+    if not cart:
+        flash('Корзина порожня!', 'danger')
+        return redirect(url_for('cart'))
+    save_orders_to_excel(cart)
+    session['cart'] = []
+    flash('Замовлення оформлено та збережено у Excel!', 'success')
+    return redirect(url_for('cart'))
+
+@app.route('/clear_cart')
+def clear_cart():
+    session['cart'] = []
+    flash('Корзину очищено!', 'success')
+    return redirect(url_for('cart'))
 
 if __name__ == '__main__':
     app.run(debug=True) 

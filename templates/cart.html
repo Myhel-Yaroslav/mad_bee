@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <style>
+        body { background: #fffbe6; }
+        .container { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #e2c96c; padding: 30px; }
+        h1 { color: #b8860b; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #e2c96c; padding: 8px; text-align: center; }
+        th { background: #fffbe6; }
+        .flash { padding: 10px; border-radius: 5px; margin-bottom: 15px; }
+        .flash-danger { background: #ffe0e0; color: #a94442; }
+        .flash-success { background: #e6ffe0; color: #3c763d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="btn btn-link">&larr; На головну</a>
+        <h1>Ваша корзина</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {% if cart and cart|length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Мед</th>
+                    <th>Кількість (кг)</th>
+                    <th>Ім'я</th>
+                    <th>Телефон</th>
+                    <th>Адреса нової пошти</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                <tr>
+                    <td>{{ item.honey }}</td>
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.phone }}</td>
+                    <td>{{ item.address }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form method="post" action="/place_order">
+            <button type="submit" class="btn btn-success">Оформити замовлення</button>
+            <a href="/clear_cart" class="btn btn-danger ms-2">Очистити корзину</a>
+        </form>
+        {% else %}
+        <p>Корзина порожня.</p>
+        {% endif %}
+    </div>
+</body>
+</html> 
